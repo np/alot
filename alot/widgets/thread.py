@@ -14,6 +14,7 @@ from alot.helper import tag_cmp
 from alot.widgets.globals import HeadersList
 from alot.widgets.globals import TagWidget
 from alot.widgets.globals import AttachmentWidget
+from alot.widgets.trees.walkers import TreeWalker
 
 
 class MessageWidget(urwid.WidgetWrap):
@@ -311,3 +312,79 @@ class MessageBodyWidget(urwid.AttrMap):
         bodytxt = message.extract_body(msg)
         att = settings.get_theming_attribute('thread', 'body')
         urwid.AttrMap.__init__(self, urwid.Text(bodytxt), att)
+
+
+class ThreadTreeWalker(TreeWalker):
+    """
+    """
+    def __init__(self, thread, **kwargs):
+        self._thread = thread
+        self._msg_dict = thread.get_messages()
+
+        self._parent_of_mid = {}
+        self._children_of_mid = {}
+        self._msg = {}
+        self._msg_widget = {}
+        self._next_sibling = {}
+        self._prev_sibling = {}
+        for msg, children in self._msg_dict.items():
+            mid = msg.get_message_id()
+            self._msg[mid] = msg
+            self._children_of_mid[mid] = []
+            previd = cid = None
+            for c in children:
+                cid = c.get_message_id()
+                self._children_of_mid[mid].append(cid)
+                self._parent_of_mid[cid] = mid
+                self._next_sibling[previd] = cid
+                self._prev_sibling[cid] = previd
+                previd = cid
+            self._next_sibling[cid] = None
+
+        self.root = thread.get_toplevel_messages()[0].get_message_id()
+        TreeWalker.__init__(self, **kwargs)
+
+    def get_message_widgets(self):
+        return self._msg_widget.values()
+
+    # TreeWalker API
+    def __getitem__(self, mid):
+        widget = None
+        msg = self._msg[mid]
+        if msg not in self._msg_widget:
+            widget = MessageWidget(msg)
+            self._msg_dict[msg] = widget
+        return widget
+
+    def parent_position(self, mid):
+        parent = None
+        if mid is not None:
+            if mid in self._parent_of_mid:
+                parent = self._parent_of_mid[mid]
+        return parent
+
+    def first_child_position(self, mid):
+        candidate = None
+        children = self._children_of_mid[mid]
+        if children:
+            candidate = children[0]
+        return candidate
+
+    def last_child_position(self, mid):
+        candidate = None
+        children = self._children_of_mid[mid]
+        if children:
+            candidate = children[-1]
+        return candidate
+
+    def next_sibling_position(self, mid):
+        candidate = None
+        if mid in self._next_sibling:
+            candidate = self._next_sibling[mid]
+        return candidate
+
+    def prev_sibling_position(self, mid):
+        candidate = None
+        if mid in self._prev_sibling:
+            candidate = self._prev_sibling[mid]
+        return candidate
