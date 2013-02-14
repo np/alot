@@ -9,7 +9,7 @@ The following commands are available in envelope mode
 
 .. describe:: unencrypt
 
-    goo
+    remove request to encrypt message before sending
 
 
 .. _cmd.envelope.set:
@@ -30,7 +30,7 @@ The following commands are available in envelope mode
 
 .. describe:: encrypt
 
-    encrypt
+    request encryption of message before sendout
 
     argument
         keyid of the key to encrypt with
@@ -94,7 +94,7 @@ The following commands are available in envelope mode
 
 .. describe:: rmencrypt
 
-    lalal
+    do not encrypt to given recipient key
 
     argument
         keyid of the key to encrypt with
@@ -114,7 +114,7 @@ The following commands are available in envelope mode
 
 .. describe:: toggleencrypt
 
-    toggle whether msg should be encrypted before sendout
+    toggle whether message should be encrypted before sendout
 
     argument
         keyid of the key to encrypt with

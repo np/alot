@@ -26,6 +26,7 @@ The following commands are available in search mode
 
     optional arguments
         :---no-flush: postpone a writeout to the index (Defaults to: 'True').
+        :---all: retag all messages in search result.
 
 .. _cmd.search.retag:
 
@@ -38,6 +39,7 @@ The following commands are available in search mode
 
     optional arguments
         :---no-flush: postpone a writeout to the index (Defaults to: 'True').
+        :---all: retag all messages in search result.
 
 .. _cmd.search.refineprompt:
 
@@ -57,6 +59,7 @@ The following commands are available in search mode
 
     optional arguments
         :---no-flush: postpone a writeout to the index (Defaults to: 'True').
+        :---all: retag all messages in search result.
 
 .. _cmd.search.refine:
 
