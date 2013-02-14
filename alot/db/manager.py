@@ -158,6 +158,13 @@ class DBManager(object):
                             msg.freeze()
                             if cmd == 'tag':
                                 for tag in tags:
+                                  if tag.startswith('+'):
+                                    msg.add_tag(tag[1:].encode(DB_ENC),
+                                                sync_maildir_flags=sync)
+                                  elif tag.startswith('-'):
+                                    msg.remove_tag(tag[1:].encode(DB_ENC),
+                                                   sync_maildir_flags=sync)
+                                  else:
                                     msg.add_tag(tag.encode(DB_ENC),
                                                 sync_maildir_flags=sync)
                             if cmd == 'set':

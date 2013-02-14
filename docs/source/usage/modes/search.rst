@@ -74,10 +74,12 @@ The following commands are available in search mode
 
 .. describe:: tag
 
-    add tags to all messages in the thread
+    add/remove tags to all messages in the thread
 
     argument
         comma separated list of tags
+            if the tag starts with '-' it is removed
+            if the tag starts with '+' or no special symbol it is added
 
     optional arguments
         :---no-flush: postpone a writeout to the index (Defaults to: 'True').
