@@ -5,6 +5,13 @@ Commands in `envelope` mode
 ---------------------------
 The following commands are available in envelope mode
 
+.. _cmd.envelope.unencrypt:
+
+.. describe:: unencrypt
+
+    goo
+
+
 .. _cmd.envelope.set:
 
 .. describe:: set
@@ -18,6 +25,16 @@ The following commands are available in envelope mode
 
     optional arguments
         :---append: keep previous values.
+
+.. _cmd.envelope.encrypt:
+
+.. describe:: encrypt
+
+    encrypt
+
+    argument
+        keyid of the key to encrypt with
+
 
 .. _cmd.envelope.togglesign:
 
@@ -43,7 +60,7 @@ The following commands are available in envelope mode
     edit mail
 
     optional arguments
-        :---spawn: spawn editor in new terminal.
+        :---spawn: force spawning of editor in a new terminal.
         :---refocus: refocus envelope after editing (Defaults to: 'True').
 
 .. _cmd.envelope.send:
@@ -73,6 +90,16 @@ The following commands are available in envelope mode
         file(s) to attach (accepts wildcads)
 
 
+.. _cmd.envelope.rmencrypt:
+
+.. describe:: rmencrypt
+
+    lalal
+
+    argument
+        keyid of the key to encrypt with
+
+
 .. _cmd.envelope.refine:
 
 .. describe:: refine
@@ -81,6 +108,16 @@ The following commands are available in envelope mode
 
     argument
         header to refine
+
+
+.. _cmd.envelope.toggleencrypt:
+
+.. describe:: toggleencrypt
+
+    toggle whether msg should be encrypted before sendout
+
+    argument
+        keyid of the key to encrypt with
 
 
 .. _cmd.envelope.save:
@@ -106,18 +143,4 @@ The following commands are available in envelope mode
     argument
         header to refine
 
-.. _cmd.envelope.encrypt:
-
-.. describe:: encrypt
-
-    mark mail to be encrypted with given key before sending
-
-    argument
-        key id to sign with
-
-.. _cmd.envelope.unencrypt:
-
-.. describe:: unencrypt
-
-    mark mail not to be encrypted
 

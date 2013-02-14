@@ -12,7 +12,8 @@ The following commands are available globally
     close a buffer
 
     optional arguments
-        :---redraw: redraw display after closing current buffer.
+        :---redraw: redraw current buffer                      after command has finished.
+        :---force: never ask for confirmation.
 
 .. _cmd.global.bprevious:
 
@@ -33,22 +34,12 @@ The following commands are available globally
     optional arguments
         :---sort: sort order. Valid choices are: \`oldest_first\`,\`newest_first\`,\`message_id\`,\`unsorted\`.
 
-.. _cmd.global.compose:
+.. _cmd.global.repeat:
 
-.. describe:: compose
+.. describe:: repeat
 
-    compose a new email
+    Repeats the command executed last time
 
-    optional arguments
-        :---sender: sender.
-        :---template: path to a template message file.
-        :---subject: subject line.
-        :---to: recipients.
-        :---cc: copy to.
-        :---bcc: blind copy to.
-        :---attach: attach files.
-        :---omit_signature: do not add signature.
-        :---spawn: spawn editor in new terminal.
 
 .. _cmd.global.prompt:
 
@@ -73,14 +64,24 @@ The following commands are available globally
         command or 'bindings'
 
 
+.. _cmd.global.buffer:
+
+.. describe:: buffer
+
+    focus buffer with given index
+
+    argument
+        buffer index to focus
+
+
 .. _cmd.global.move:
 
 .. describe:: move
 
-    move focus
+    move focus in current buffer
 
     argument
-        direction
+        up, down, page up, page down
 
 
 .. _cmd.global.shellescape:
@@ -104,19 +105,29 @@ The following commands are available globally
     refresh the current buffer
 
 
-.. _cmd.global.cancel:
-
-.. describe:: cancel
-
-    send cancel event
-
-
 .. _cmd.global.pyshell:
 
 .. describe:: pyshell
 
     open an interactive python shell for introspection
 
+
+.. _cmd.global.compose:
+
+.. describe:: compose
+
+    compose a new email
+
+    optional arguments
+        :---sender: sender.
+        :---template: path to a template message file.
+        :---subject: subject line.
+        :---to: recipients.
+        :---cc: copy to.
+        :---bcc: blind copy to.
+        :---attach: attach files.
+        :---omit_signature: do not add signature.
+        :---spawn: spawn editor in new terminal.
 
 .. _cmd.global.exit:
 
@@ -154,13 +165,6 @@ The following commands are available globally
 .. describe:: bnext
 
     focus next buffer
-
-
-.. _cmd.global.select:
-
-.. describe:: select
-
-    send select event
 
 
 .. _cmd.global.taglist:
