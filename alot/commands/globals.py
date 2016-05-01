@@ -42,15 +42,22 @@ class ExitCommand(Command):
     """shut down cleanly"""
     @inlineCallbacks
     def apply(self, ui):
-        msg = 'index not fully synced. ' if ui.db_was_locked else ''
-        if settings.get('bug_on_exit') or ui.db_was_locked:
-            msg += 'really quit?'
+        if settings.get('bug_on_exit'):
+            msg = 'really quit?'
             if (yield ui.choice(msg, select='yes', cancel='no',
                                 msg_position='left')) == 'no':
                 return
+
         for b in ui.buffers:
             b.cleanup()
-        ui.exit()
+        ui.apply_command(FlushCommand(callback=ui.exit))
+
+        if ui.db_was_locked:
+            msg = 'Database locked. Exit without saving?'
+            if (yield ui.choice(msg, select='yes', cancel='no',
+                                msg_position='left')) == 'no':
+                return
+            ui.exit()
 
 
 @registerCommand(MODE, 'search', usage='search query', arguments=[
@@ -552,14 +559,15 @@ class FlushCommand(Command):
         except DatabaseLockedError:
             timeout = settings.get('flush_retry_timeout')
 
-            def f(*args):
-                self.apply(ui)
-            ui.mainloop.set_alarm_in(timeout, f)
-            if not ui.db_was_locked:
-                if not self.silent:
-                    ui.notify(
-                        'index locked, will try again in %d secs' % timeout)
-                ui.db_was_locked = True
+            if timeout > 0:
+                def f(*args):
+                    self.apply(ui)
+                ui.mainloop.set_alarm_in(timeout, f)
+                if not ui.db_was_locked:
+                    if not self.silent:
+                        ui.notify(
+                            'index locked, will try again in %d secs' % timeout)
+                    ui.db_was_locked = True
             ui.update()
             return
 
@@ -858,8 +866,13 @@ class ComposeCommand(Command):
                     self.envelope.attach(a)
                     logging.debug('attaching: ' + a)
 
+        if account is None:
+            encrypt_by_default = None
+        else:
+            encrypt_by_default = account.encrypt_by_default
+
         # set encryption if needed
-        if self.encrypt or account.encrypt_by_default:
+        if self.encrypt or encrypt_by_default:
             yield self._set_encrypt(ui, self.envelope)
 
         cmd = commands.envelope.EditCommand(envelope=self.envelope,
@@ -869,6 +882,14 @@ class ComposeCommand(Command):
 
     @inlineCallbacks
     def _set_encrypt(self, ui, envelope):
+        """Find and set the encryption keys in an envolope.
+
+        :param ui: the main user interface object
+        :type ui: alot.ui.UI
+        :param envolope: the envolope buffer object
+        :type envolope: alot.buffers.EnvelopeBuffer
+
+        """
         encrypt_keys = []
         for recipient in envelope.headers['To'][0].split(','):
             if not recipient:

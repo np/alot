@@ -85,7 +85,8 @@ edit_headers_whitelist = force_list(default=list(*,))
 # see :ref:`edit_headers_whitelist <edit-headers-whitelist>`
 edit_headers_blacklist = force_list(default=list(Content-Type,MIME-Version,References,In-Reply-To))
 
-# timeout in seconds after a failed attempt to writeout the database is repeated
+# timeout in seconds after a failed attempt to writeout the database is
+# repeated. Set to 0 for no retry.
 flush_retry_timeout = integer(default=5)
 
 # where to look up hooks
@@ -129,6 +130,9 @@ search_statusbar = mixed_list(string, string, default=list('[{buffer_no}: search
 # * `{subject}`: subject line of the thread
 # * `{authors}`: abbreviated authors string for this thread
 # * `{message_count}`: number of contained messages
+# * `{thread_tags}`: displays all tags present in the current thread.
+# * `{intersection_tags}`: displays tags common to all messages in the current thread.
+
 thread_statusbar = mixed_list(string, string, default=list('[{buffer_no}: thread] {subject}','{input_queue} total messages: {total_messages}'))
 
 # Format of the status-bar in taglist mode.
